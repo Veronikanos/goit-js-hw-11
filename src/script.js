@@ -2,7 +2,7 @@ import Notiflix from 'notiflix';
 import { renderMarkup } from './js/markup';
 
 const formElement = document.querySelector('form#search-form');
-const galleryList = document.querySelector('.gallery-photo');
+const galleryList = document.querySelector('.gallery');
 
 formElement.addEventListener('submit', fetchRequest);
 
@@ -21,13 +21,22 @@ function fetchRequest(event) {
     });
 }
 
-function fetchInfo(q) {
-  return fetch(
-    `https://pixabay.com/api/?key=31497264-8254871d687ec8d5b65884355&q=${q}&image_type=photo&total=30`
-  ).then(response => {
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    return response.json();
+function fetchInfo(userInput) {
+  const BASE_URL = 'https://pixabay.com/api/';
+  const API_KEY = '31497264-8254871d687ec8d5b65884355';
+  const searchParams = new URLSearchParams({
+    q: userInput,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
   });
+
+  return fetch(`${BASE_URL}?key=${API_KEY}&${searchParams}&total=30`).then(
+    response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      return response.json();
+    }
+  );
 }
