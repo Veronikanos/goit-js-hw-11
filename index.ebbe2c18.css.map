@@ -1,0 +1,1 @@
+{"mappings":"ACAA,mBAIA","sources":["index.ebbe2c18.css","src/sass/style.scss"],"sourcesContent":["li {\n  list-style: none;\n}\n\n.photo-card {\n  width: 300px;\n}\n\n/*# sourceMappingURL=index.ebbe2c18.css.map */\n","li {\n  list-style: none;\n}\n\n.photo-card {\n  width: 300px;\n}\n"],"names":[],"version":3,"file":"index.ebbe2c18.css.map"}
