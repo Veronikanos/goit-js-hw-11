@@ -7,22 +7,20 @@ const galleryList = document.querySelector('.gallery');
 
 formElement.addEventListener('submit', fetchRequest);
 
-function fetchRequest(event) {
+async function fetchRequest(event) {
   event.preventDefault();
 
-  fetchInfo(event.target.elements.searchQuery.value) //.toLowerCase().trim()
-    .then(data => {
-      const markup = data.hits.map(item => renderMarkup(item));
+  try {
+    const { data } = await fetchInfo(event.target.elements.searchQuery.value);
+    const markup = data.hits.map(item => renderMarkup(item));
 
-      // galleryList.insertAdjacentHTML('beforeend', markup.join(''));
-      galleryList.innerHTML = markup.join('');
-    })
-    .catch(err => {
-      Notiflix.Notify.failure(err);
-    });
+    galleryList.insertAdjacentHTML('beforeend', markup.join(''));
+  } catch (error) {
+    Notiflix.Notify.failure(error);
+  }
 }
 
-function fetchInfo(userInput) {
+async function fetchInfo(userInput) {
   const BASE_URL = 'https://pixabay.com/api/';
   const API_KEY = '31497264-8254871d687ec8d5b65884355';
   const searchParams = new URLSearchParams({
@@ -32,13 +30,8 @@ function fetchInfo(userInput) {
     safesearch: true,
   });
 
-  return axios
-    .get(`${BASE_URL}?key=${API_KEY}&${searchParams}&total=30`)
-    .then(response => {
-      if (response.status < 200 || response.status > 300) {
-        throw new Error(response);
-      }
-      console.log(response);
-      return response.data;
-    });
+  const response = await axios.get(
+    `${BASE_URL}?key=${API_KEY}&${searchParams}&total=30`
+  );
+  return response;
 }
