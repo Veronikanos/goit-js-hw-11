@@ -1,5 +1,6 @@
 import Notiflix from 'notiflix';
 import { renderMarkup } from './js/markup';
+const axios = require('axios').default;
 
 const formElement = document.querySelector('form#search-form');
 const galleryList = document.querySelector('.gallery');
@@ -9,7 +10,7 @@ formElement.addEventListener('submit', fetchRequest);
 function fetchRequest(event) {
   event.preventDefault();
 
-  fetchInfo(event.target.elements.searchQuery.value)
+  fetchInfo(event.target.elements.searchQuery.value) //.toLowerCase().trim()
     .then(data => {
       const markup = data.hits.map(item => renderMarkup(item));
 
@@ -31,12 +32,13 @@ function fetchInfo(userInput) {
     safesearch: true,
   });
 
-  return fetch(`${BASE_URL}?key=${API_KEY}&${searchParams}&total=30`).then(
-    response => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
+  return axios
+    .get(`${BASE_URL}?key=${API_KEY}&${searchParams}&total=30`)
+    .then(response => {
+      if (response.status < 200 || response.status > 300) {
+        throw new Error(response);
       }
-      return response.json();
-    }
-  );
+      console.log(response);
+      return response.data;
+    });
 }
