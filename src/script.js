@@ -18,6 +18,8 @@ async function fetchRequest(event) {
     photosApiService.query = event.target.elements.searchQuery.value
       .trim()
       .toLowerCase();
+    photosApiService.resetPage();
+    loadMoreBtn.classList.remove('is-hidden');
     const { data } = await photosApiService.fetchInfo();
     const markup = data.hits.map(item => renderMarkup(item));
 
