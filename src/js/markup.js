@@ -1,4 +1,5 @@
 export function getMarkupElements({
+  largeImageURL,
   webformatURL,
   tags,
   likes,
@@ -6,7 +7,8 @@ export function getMarkupElements({
   comments,
   downloads,
 }) {
-  return ` <div class="photo-card">
+  return ` 	<a href="${largeImageURL}"><div class="photo-card">
+
     <img src="${webformatURL}" alt="${tags}" loading="lazy" />
     <div class="info">
       <p class="info-item">
@@ -22,6 +24,7 @@ export function getMarkupElements({
         <b>📥Downloads: </b>${downloads}
       </p>
     </div>
-  </div>
+		
+  </div></a>
 	`;
 }

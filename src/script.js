@@ -1,7 +1,9 @@
 import Notiflix from 'notiflix';
 import { getMarkupElements } from './js/markup';
+import { simpleLightBox } from './js/lightbox';
 import PhotosApiService from './js/api-service';
-// const axios = require('axios').default;
+// import SimpleLightbox from 'simplelightbox';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const formElement = document.querySelector('form#search-form');
 const galleryList = document.querySelector('.gallery');
@@ -31,7 +33,6 @@ async function fetchRequest(event) {
       loadMoreBtn.classList.remove('is-hidden');
     }
     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images`);
-
     renderMarkup(data.hits);
   } catch (error) {
     Notiflix.Notify.failure(error);
@@ -40,6 +41,7 @@ async function fetchRequest(event) {
 
 async function onLoadMore() {
   photosApiService.incrementPage();
+
   const { data } = await photosApiService.fetchInfo();
 
   if (data.hits.length < photosApiService.perPage) {
@@ -51,9 +53,12 @@ async function onLoadMore() {
 function renderMarkup(res) {
   const markup = res.map(item => getMarkupElements(item));
   galleryList.insertAdjacentHTML('beforeend', markup.join(''));
+  simpleLightBox.refresh();
 }
 
 function reachedTheEnd() {
   loadMoreBtn.classList.add('is-hidden');
-  Notiflix.Notify.info("That's all we found!");
+  Notiflix.Notify.info(
+    "We're sorry, but you've reached the end of search results."
+  );
 }
