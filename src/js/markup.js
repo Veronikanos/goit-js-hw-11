@@ -1,4 +1,4 @@
-export function renderMarkup({
+export function getMarkupElements({
   webformatURL,
   tags,
   likes,

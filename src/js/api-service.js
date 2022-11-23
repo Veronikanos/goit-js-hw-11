@@ -1,9 +1,11 @@
 const axios = require('axios').default;
+// import axios from 'axios';
 
 export default class PhotosApiService {
   constructor() {
     this.page = 1;
     this.searchQuery = '';
+    this.perPage = 40;
   }
 
   async fetchInfo() {
@@ -14,13 +16,16 @@ export default class PhotosApiService {
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: true,
-      per_page: 40,
     });
 
-    const response = await axios.get(
-      `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&${searchParams}&page=${this.page}}`
-    );
-    return response;
+    try {
+      const response = await axios.get(
+        `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&${searchParams}&page=${this.page}&per_page=${this.perPage}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   incrementPage() {

@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import { renderMarkup } from './js/markup';
+import { getMarkupElements } from './js/markup';
 import PhotosApiService from './js/api-service';
 // const axios = require('axios').default;
 
@@ -20,13 +20,19 @@ async function fetchRequest(event) {
       .toLowerCase();
     photosApiService.resetPage();
     galleryList.innerHTML = '';
-    loadMoreBtn.classList.remove('is-hidden');
+
     const { data } = await photosApiService.fetchInfo();
-    const markup = data.hits.map(item => renderMarkup(item));
 
-    // console.log(markup);
+    if (!data.totalHits) {
+      Notiflix.Notify.failure('No result');
+      return;
+    }
+    if (data.totalHits > photosApiService.perPage) {
+      loadMoreBtn.classList.remove('is-hidden');
+    }
+    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images`);
 
-    galleryList.insertAdjacentHTML('beforeend', markup.join(''));
+    renderMarkup(data.hits);
   } catch (error) {
     Notiflix.Notify.failure(error);
   }
@@ -36,6 +42,18 @@ async function onLoadMore() {
   photosApiService.incrementPage();
   const { data } = await photosApiService.fetchInfo();
 
-  const markup = data.hits.map(item => renderMarkup(item));
+  if (data.hits.length < photosApiService.perPage) {
+    reachedTheEnd();
+  }
+  renderMarkup(data.hits);
+}
+
+function renderMarkup(res) {
+  const markup = res.map(item => getMarkupElements(item));
   galleryList.insertAdjacentHTML('beforeend', markup.join(''));
+}
+
+function reachedTheEnd() {
+  loadMoreBtn.classList.add('is-hidden');
+  Notiflix.Notify.info("That's all we found!");
 }
