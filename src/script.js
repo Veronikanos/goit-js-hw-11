@@ -19,6 +19,7 @@ async function fetchRequest(event) {
       .trim()
       .toLowerCase();
     photosApiService.resetPage();
+    galleryList.innerHTML = '';
     loadMoreBtn.classList.remove('is-hidden');
     const { data } = await photosApiService.fetchInfo();
     const markup = data.hits.map(item => renderMarkup(item));
