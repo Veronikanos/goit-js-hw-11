@@ -12,6 +12,7 @@ body {
 }
 
 a {
+  width: 24%;
   text-decoration: none;
   color: #2a2a2a;
 }
@@ -47,6 +48,11 @@ li {
 .info {
   display: flex;
   justify-content: space-around;
+  font-size: 0.8em;
+}
+
+.info-item {
+  text-align: center;
 }
 
 .search-form {
@@ -76,4 +82,19 @@ button.load-more {
 
 button.load-more.is-hidden {
   display: none;
+}
+
+@media screen and (max-width: 1024px) {
+  a {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  a {
+    width: 45%;
+  }
+  .info {
+    display: block;
+  }
 }
