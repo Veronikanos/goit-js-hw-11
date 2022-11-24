@@ -30,6 +30,7 @@ async function fetchRequest(event) {
     }
     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images`);
     renderMarkup(data.hits);
+    smoothScroll();
   } catch (error) {
     Notiflix.Notify.failure(error);
   }
@@ -42,6 +43,7 @@ async function onLoadMore() {
     reachedTheEnd();
   }
   renderMarkup(data.hits);
+  smoothScroll();
 }
 
 function renderMarkup(res) {
@@ -55,4 +57,14 @@ function reachedTheEnd() {
   Notiflix.Notify.info(
     "We're sorry, but you've reached the end of search results."
   );
+}
+
+function smoothScroll() {
+  const { height: cardHeight } =
+    galleryList.firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
